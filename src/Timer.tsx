@@ -25,6 +25,24 @@ const Timer = () => {
     };
   }, [isRunning]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isRunning) return;
+      
+      if (e.key >= '0' && e.key <= '9') {
+        const newValue = (inputTime + e.key).slice(0, 6);
+        setInputTime(newValue);
+        setIsFocused(true);
+      } else if (e.key === 'Backspace') {
+        setInputTime(inputTime.slice(0, -1));
+        setIsFocused(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [inputTime, isRunning]);
+
   const formatInputToTime = (numbers: string): string => {
     const padded = numbers.padStart(6, '0');
     
@@ -35,14 +53,10 @@ const Timer = () => {
     return `${hours}:${minutes}:${seconds}`;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
-    setInputTime(value);
-  };
-
   const handleDisplayClick = () => {
     if (!isRunning && inputRef.current) {
       inputRef.current.focus();
+      setIsFocused(true);
     }
   };
 
@@ -53,6 +67,7 @@ const Timer = () => {
       const totalSeconds = hours * 3600 + minutes * 60 + seconds;
       setTime(totalSeconds);
       setIsRunning(true);
+      setIsFocused(false);
     }
   };
 
@@ -60,6 +75,7 @@ const Timer = () => {
     setIsRunning(false);
     setTime(0);
     setInputTime('');
+    setIsFocused(false);
   };
 
   const formatTime = (seconds: number): string => {
@@ -80,9 +96,12 @@ const Timer = () => {
         ref={inputRef}
         type="text"
         value={inputTime}
-        onChange={handleInputChange}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => {
+          if (!inputTime) {
+            setIsFocused(false);
+          }
+        }}
         className="hidden-input"
         disabled={isRunning}
         maxLength={6}
