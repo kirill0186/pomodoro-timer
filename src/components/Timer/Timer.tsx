@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './Timer.css';
+import { formatInputToTime, formatTime } from './timeFormat';
 
 const Timer = () => {
   const [time, setTime] = useState<number>(0);
@@ -12,7 +13,7 @@ const Timer = () => {
   useEffect(() => {
     if (isRunning) {
       timerRef.current = window.setInterval(() => {
-        setTime((prevTime) => prevTime - 1);
+        setTime(prevTime => prevTime - 1);
       }, 1000);
     } else if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -28,7 +29,7 @@ const Timer = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isRunning) return;
-      
+
       if (e.key >= '0' && e.key <= '9') {
         const newValue = (inputTime + e.key).slice(0, 6);
         setInputTime(newValue);
@@ -42,16 +43,6 @@ const Timer = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [inputTime, isRunning]);
-
-  const formatInputToTime = (numbers: string): string => {
-    const padded = numbers.padStart(6, '0');
-    
-    const hours = padded.slice(0, 2);
-    const minutes = padded.slice(2, 4);
-    const seconds = padded.slice(4, 6);
-    
-    return `${hours}:${minutes}:${seconds}`;
-  };
 
   const handleDisplayClick = () => {
     if (!isRunning && inputRef.current) {
@@ -78,15 +69,6 @@ const Timer = () => {
     setIsFocused(false);
   };
 
-  const formatTime = (seconds: number): string => {
-    const absSeconds = Math.abs(seconds);
-    const hours = Math.floor(absSeconds / 3600);
-    const minutes = Math.floor((absSeconds % 3600) / 60);
-    const remainingSeconds = absSeconds % 60;
-    const sign = seconds < 0 ? '-' : '';
-    return `${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
   const displayTime = isRunning ? formatTime(time) : formatInputToTime(inputTime);
 
   return (
@@ -106,10 +88,7 @@ const Timer = () => {
         disabled={isRunning}
         maxLength={6}
       />
-      <div 
-        className={`timer-display ${isFocused ? 'focused' : ''}`} 
-        onClick={handleDisplayClick}
-      >
+      <div className={`timer-display ${isFocused ? 'focused' : ''}`} onClick={handleDisplayClick}>
         <span className={time < 0 ? 'negative-time' : ''}>{displayTime}</span>
       </div>
       <div className="timer-controls">
@@ -124,4 +103,4 @@ const Timer = () => {
   );
 };
 
-export default Timer; 
+export default Timer;
