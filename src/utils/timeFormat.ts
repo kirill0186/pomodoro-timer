@@ -20,3 +20,9 @@ export const formatInputToTime = (numbers: string): string => {
 
     return `${hours}:${minutes}:${seconds}`;
 };
+
+export const inputTimeToSeconds = (inputTime: string): number => {
+    const formattedTime = formatInputToTime(inputTime);
+    const [hours, minutes, seconds] = formattedTime.split(':').map(Number);
+    return hours * 3600 + minutes * 60 + seconds; 
+}

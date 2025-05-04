@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './Timer.css';
-import { formatInputToTime, formatTime } from '../../utils/timeFormat';
+import { formatInputToTime, formatTime, inputTimeToSeconds } from '../../utils/timeFormat';
 
 const Timer = () => {
   const [time, setTime] = useState<number>(0);
@@ -39,10 +39,7 @@ const Timer = () => {
 
   const handleStart = () => {
     if (inputTime && !isRunning) {
-      const formattedTime = formatInputToTime(inputTime);
-      const [hours, minutes, seconds] = formattedTime.split(':').map(Number);
-      const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-      setTime(totalSeconds);
+      setTime(inputTimeToSeconds(inputTime));
       setIsRunning(true);
     }
   };
