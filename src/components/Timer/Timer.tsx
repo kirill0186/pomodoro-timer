@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './Timer.css';
-import { formatInputToTime, formatTime } from './timeFormat';
+import { formatInputToTime, formatTime } from '../../utils/timeFormat';
 
 const Timer = () => {
   const [time, setTime] = useState<number>(0);
