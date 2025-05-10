@@ -6,13 +6,10 @@ interface MainTimerInputProps {
   time: number;
   setTime: (value: number | ((prevTime: number) => number)) => void;
   isRunning: boolean;
+  handlePrevTime: (prevTime: number) => void;
 }
 
-const MainTimerInput = ({
-  time,
-  setTime,
-  isRunning,
-}: MainTimerInputProps) => {
+const MainTimerInput = ({ time, setTime, isRunning, handlePrevTime }: MainTimerInputProps) => {
   const [inputTime, setInputTime] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const timerRef = useRef<number | null>(null);
@@ -21,7 +18,13 @@ const MainTimerInput = ({
   useEffect(() => {
     if (isRunning) {
       timerRef.current = window.setInterval(() => {
-        setTime(prevTime => prevTime - 1);
+        setTime(prevTime => {
+          if (handlePrevTime) {
+            handlePrevTime(prevTime);
+          }
+
+          return prevTime - 1;
+        });
       }, 1000);
     } else if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -48,7 +51,7 @@ const MainTimerInput = ({
   const handleBlur = () => {
     setIsFocused(false);
     setTime(inputTimeToSeconds(inputTime));
-  }
+  };
 
   const displayTime = isRunning ? formatTime(time) : formatInputToTime(inputTime);
 
