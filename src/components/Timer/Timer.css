@@ -61,16 +61,15 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s;
+  color: white;
 }
 
-.timer-controls button:first-child {
+.start-button {
   background-color: #4CAF50;
-  color: white;
 }
 
-.timer-controls button:last-child {
+.stop-button {
   background-color: #f44336;
-  color: white;
 }
 
 .timer-controls button:disabled {
@@ -78,6 +77,6 @@
   cursor: not-allowed;
 }
 
-.timer-controls button:not(:disabled):hover {
+.timer-controls button:hover {
   opacity: 0.9;
 } 

@@ -71,12 +71,16 @@ const Timer = () => {
         <span className={time < 0 ? 'negative-time' : ''}>{displayTime}</span>
       </div>
       <div className="timer-controls">
-        <button onClick={handleStart} disabled={isRunning || !inputTime}>
-          Start
-        </button>
-        <button onClick={handleStop} disabled={!isRunning}>
-          Stop
-        </button>
+        {(!isRunning && inputTime) && (
+          <button onClick={handleStart} className="start-button">
+            Start
+          </button>
+        )}
+        {isRunning && (
+          <button onClick={handleStop} className="stop-button">
+            Stop
+          </button>
+        )}
       </div>
     </div>
   );
