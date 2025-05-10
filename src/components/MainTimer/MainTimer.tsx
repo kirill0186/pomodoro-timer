@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import './Timer.css';
+import './MainTimer.css';
 import { formatInputToTime, formatTime, inputTimeToSeconds } from '../../utils/timeFormat';
 
-const Timer = () => {
+const MainTimer = () => {
   const [time, setTime] = useState<number>(0);
   const [inputTime, setInputTime] = useState<string>('');
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -86,4 +86,4 @@ const Timer = () => {
   );
 };
 
-export default Timer;
+export default MainTimer;

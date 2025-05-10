@@ -1,11 +1,11 @@
-import Timer from './components/Timer/Timer'
+import MainTimer from './components/MainTimer/MainTimer'
 import TimerList from './components/TimerList/TimerList'
 import './App.css'
 
 function App() {
   return (
     <div className="app">
-      <Timer />
+      <MainTimer />
       <TimerList />
     </div>
   )
