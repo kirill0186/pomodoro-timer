@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { formatInputToTime, inputTimeToSeconds } from '../../utils/timeFormat';
+import { formatInputToTime, inputTimeToSeconds, sanitizeTimerValue } from '../../utils/timeFormat';
 
 interface TimerListItemProps {
   upadteTimer: (seconds: number) => void;
@@ -13,7 +13,7 @@ const TimerListItem = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    const value = sanitizeTimerValue(e.target.value);
     setInputTime(value);
   };
 
@@ -39,7 +39,10 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         value={inputTime}
         onChange={handleInputChange}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => {
+          setIsFocused(false);
+          upadteTimer(inputTimeToSeconds(inputTime));
+        }}
         className="hidden-input"
         maxLength={6}
       />

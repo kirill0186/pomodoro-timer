@@ -26,3 +26,5 @@ export const inputTimeToSeconds = (inputTime: string): number => {
     const [hours, minutes, seconds] = formattedTime.split(':').map(Number);
     return hours * 3600 + minutes * 60 + seconds; 
 }
+
+export const sanitizeTimerValue = (value: string) => value.replace(/\D/g, '').slice(0, 6);

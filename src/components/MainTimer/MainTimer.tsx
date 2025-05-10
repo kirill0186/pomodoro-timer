@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './MainTimer.css';
-import { formatInputToTime, formatTime, inputTimeToSeconds } from '../../utils/timeFormat';
+import { formatInputToTime, formatTime, inputTimeToSeconds, sanitizeTimerValue } from '../../utils/timeFormat';
 
 const MainTimer = () => {
   const [time, setTime] = useState<number>(0);
@@ -27,7 +27,7 @@ const MainTimer = () => {
   }, [isRunning]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    const value = sanitizeTimerValue(e.target.value);
     setInputTime(value);
   };
 
