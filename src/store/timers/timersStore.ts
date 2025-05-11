@@ -13,6 +13,7 @@ interface TimersStore {
     updateTimer: (id: number, seconds: number) => void;
     setCurrentTimer: (id: number | null) => void;
     getTimer: (id: number | null) => TimerItem | null;
+    isTimerLast: (id: number | null) => boolean;
 }
 
 export const useTimersStore = create<TimersStore>((set, get) => ({
@@ -30,4 +31,9 @@ export const useTimersStore = create<TimersStore>((set, get) => ({
     })),
     setCurrentTimer: (id: number | null) => set({ currentTimerId: id }),
     getTimer: (id: number | null) => get().timers.find(timer => timer.id === id) || null,
+    isTimerLast: (id: number | null) => {
+        if (!id) return false;
+        const currentIndex = get().timers.findIndex(t => t.id === id);
+        return currentIndex === get().timers.length - 1;
+    },
 })); 

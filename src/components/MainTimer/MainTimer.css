@@ -72,6 +72,10 @@
   background-color: #f44336;
 }
 
+.next-button {
+  background-color: #2196F3;
+}
+
 .timer-controls button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
