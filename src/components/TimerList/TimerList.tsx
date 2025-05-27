@@ -3,10 +3,11 @@ import TimerListItem from './TimerListItem';
 import { useTimersStore } from '../../store/timers/timersStore';
 
 const TimerList = () => {
-  const { timers, addTimer, updateTimer, currentTimerId, setCurrentTimer } = useTimersStore();
+  const { timers, addTimer, updateTimer, currentTimerId, setCurrentTimer, resetAllTimersOvertime } = useTimersStore();
 
   const handleRunTimers = () => {
     if (timers.length > 0) {
+      resetAllTimersOvertime();
       setCurrentTimer(timers[0].id);
     }
   };
