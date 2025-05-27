@@ -38,6 +38,7 @@ const TimerList = () => {
             <TimerListItem
               upadteTimer={(seconds: number) => updateTimer(timer.id, seconds)}
               isDisabled={timer.id === currentTimerId}
+              overtime={timer.overtime}
             />
           </div>
         ))}

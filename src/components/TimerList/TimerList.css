@@ -73,4 +73,18 @@
   font-family: monospace;
   font-size: 16px;
   color: #333;
+}
+
+.timer-list-item-display {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.overtime {
+  font-size: 0.8em;
+  color: #ff4444;
+  font-weight: 500;
 } 

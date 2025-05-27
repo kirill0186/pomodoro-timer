@@ -6,7 +6,7 @@ import { useTimersStore } from '../../store/timers/timersStore';
 const MainTimer = () => {
   const [time, setTime] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
-  const { getTimer, setCurrentTimer, timers, currentTimerId, isTimerLast } = useTimersStore();
+  const { getTimer, setCurrentTimer, timers, currentTimerId, isTimerLast, setTimerOvertime } = useTimersStore();
 
   useEffect(() => {
     const currentTimer = getTimer(currentTimerId);
@@ -25,6 +25,10 @@ const MainTimer = () => {
   };
 
   const handleStop = () => {
+    const currentTimer = getTimer(currentTimerId);
+    if (currentTimer && time < 0) {
+      setTimerOvertime(currentTimer.id, Math.abs(time));
+    }
     setIsRunning(false);
     setTime(0);
     setCurrentTimer(null);
@@ -33,6 +37,10 @@ const MainTimer = () => {
   const handleNextTimer = () => {
     const currentTimer = getTimer(currentTimerId);
     if (currentTimer) {
+      if (time < 0) {
+        setTimerOvertime(currentTimer.id, Math.abs(time));
+      }
+      
       const currentIndex = timers.findIndex(t => t.id === currentTimer.id);
       if (currentIndex < timers.length - 1) {
         setCurrentTimer(timers[currentIndex + 1].id);

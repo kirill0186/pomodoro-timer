@@ -3,6 +3,7 @@ import { create } from 'zustand';
 interface TimerItem {
     id: number;
     seconds: number;
+    overtime: number;
 }
 
 interface TimersStore {
@@ -14,6 +15,7 @@ interface TimersStore {
     setCurrentTimer: (id: number | null) => void;
     getTimer: (id: number | null) => TimerItem | null;
     isTimerLast: (id: number | null) => boolean;
+    setTimerOvertime: (id: number, overtime: number) => void;
 }
 
 export const useTimersStore = create<TimersStore>((set, get) => ({
@@ -21,7 +23,7 @@ export const useTimersStore = create<TimersStore>((set, get) => ({
     nextId: 1,
     currentTimerId: null,
     addTimer: () => set((state) => ({
-        timers: [...state.timers, { id: state.nextId, seconds: 0 }],
+        timers: [...state.timers, { id: state.nextId, seconds: 0, overtime: 0 }],
         nextId: state.nextId + 1,
     })),
     updateTimer: (id: number, seconds: number) => set((state) => ({
@@ -36,4 +38,9 @@ export const useTimersStore = create<TimersStore>((set, get) => ({
         const currentIndex = get().timers.findIndex(t => t.id === id);
         return currentIndex === get().timers.length - 1;
     },
+    setTimerOvertime: (id: number, overtime: number) => set((state) => ({
+        timers: state.timers.map((timer) =>
+            timer.id === id ? { ...timer, overtime } : timer
+        ),
+    })),
 })); 

@@ -4,11 +4,13 @@ import { formatInputToTime, inputTimeToSeconds, sanitizeTimerValue } from '../..
 interface TimerListItemProps {
   upadteTimer: (seconds: number) => void;
   isDisabled?: boolean;
+  overtime: number;
 }
 
 const TimerListItem = ({
     upadteTimer,
     isDisabled = false,
+    overtime,
 }: TimerListItemProps) => {
   const [inputTime, setInputTime] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -35,6 +37,13 @@ const TimerListItem = ({
   }
 
   const displayTime = formatInputToTime(inputTime);
+  const formatOvertime = (seconds: number): string => {
+    if (seconds === 0) return '';
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    return `+${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -54,10 +63,13 @@ const TimerListItem = ({
         disabled={isDisabled}
       />
       <div 
-        className={`timer-display ${isFocused ? 'focused' : ''} ${isDisabled ? 'disabled' : ''}`} 
+        className={`timer-display timer-list-item-display ${isFocused ? 'focused' : ''} ${isDisabled ? 'disabled' : ''}`} 
         onClick={handleDisplayClick}
       >
         <span>{displayTime}</span>
+        {overtime > 0 && (
+          <span className="overtime">{formatOvertime(overtime)}</span>
+        )}
       </div>
     </form>
   );
