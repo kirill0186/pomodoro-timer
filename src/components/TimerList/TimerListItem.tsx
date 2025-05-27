@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { formatInputToTime, inputTimeToSeconds, sanitizeTimerValue } from '../../utils/timeFormat';
+import { formatInputToTime, inputTimeToSeconds, sanitizeTimerValue, formatOvertime } from '../../utils/timeFormat';
 
 interface TimerListItemProps {
   upadteTimer: (seconds: number) => void;
@@ -37,13 +37,6 @@ const TimerListItem = ({
   }
 
   const displayTime = formatInputToTime(inputTime);
-  const formatOvertime = (seconds: number): string => {
-    if (seconds === 0) return '';
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = seconds % 60;
-    return `+${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
 
   return (
     <form onSubmit={handleSubmit}>
