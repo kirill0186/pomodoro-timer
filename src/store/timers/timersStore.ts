@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface TimerItem {
     id: number;
@@ -20,36 +21,48 @@ interface TimersStore {
     resetAllTimersOvertime: () => void;
 }
 
-export const useTimersStore = create<TimersStore>((set, get) => ({
-    timers: [],
-    nextId: 1,
-    currentTimerId: null,
-    addTimer: () => set((state) => ({
-        timers: [...state.timers, { id: state.nextId, seconds: 0, overtime: 0 }],
-        nextId: state.nextId + 1,
-    })),
-    updateTimer: (id: number, seconds: number) => set((state) => ({
-        timers: state.timers.map((timer) =>
-            timer.id === id ? { ...timer, seconds } : timer
-        ),
-    })),
-    setCurrentTimer: (id: number | null) => set({ currentTimerId: id }),
-    getTimer: (id: number | null) => get().timers.find(timer => timer.id === id) || null,
-    isTimerLast: (id: number | null) => {
-        if (!id) return false;
-        const currentIndex = get().timers.findIndex(t => t.id === id);
-        return currentIndex === get().timers.length - 1;
-    },
-    setTimerOvertime: (id: number, overtime: number) => set((state) => ({
-        timers: state.timers.map((timer) =>
-            timer.id === id ? { ...timer, overtime } : timer
-        ),
-    })),
-    deleteTimer: (id: number) => set((state) => ({
-        timers: state.timers.filter(timer => timer.id !== id),
-        currentTimerId: state.currentTimerId === id ? null : state.currentTimerId
-    })),
-    resetAllTimersOvertime: () => set((state) => ({
-        timers: state.timers.map(timer => ({ ...timer, overtime: 0 }))
-    })),
-})); 
+export const useTimersStore = create<TimersStore>()(
+    persist(
+        (set, get) => ({
+            timers: [],
+            nextId: 1,
+            currentTimerId: null,
+            addTimer: () => set((state) => ({
+                timers: [...state.timers, { id: state.nextId, seconds: 0, overtime: 0 }],
+                nextId: state.nextId + 1,
+            })),
+            updateTimer: (id: number, seconds: number) => set((state) => ({
+                timers: state.timers.map((timer) =>
+                    timer.id === id ? { ...timer, seconds } : timer
+                ),
+            })),
+            setCurrentTimer: (id: number | null) => set({ currentTimerId: id }),
+            getTimer: (id: number | null) => get().timers.find(timer => timer.id === id) || null,
+            isTimerLast: (id: number | null) => {
+                if (!id) return false;
+                const currentIndex = get().timers.findIndex(t => t.id === id);
+                return currentIndex === get().timers.length - 1;
+            },
+            setTimerOvertime: (id: number, overtime: number) => set((state) => ({
+                timers: state.timers.map((timer) =>
+                    timer.id === id ? { ...timer, overtime } : timer
+                ),
+            })),
+            deleteTimer: (id: number) => set((state) => ({
+                timers: state.timers.filter(timer => timer.id !== id),
+                currentTimerId: state.currentTimerId === id ? null : state.currentTimerId
+            })),
+            resetAllTimersOvertime: () => set((state) => ({
+                timers: state.timers.map(timer => ({ ...timer, overtime: 0 }))
+            })),
+        }),
+        {
+            name: 'pomodoro-timers',
+            partialize: (state) => ({ 
+                timers: state.timers,
+                nextId: state.nextId,
+                currentTimerId: state.currentTimerId,
+            }),
+        }
+    )
+); 
