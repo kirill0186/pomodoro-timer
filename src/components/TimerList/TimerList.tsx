@@ -3,7 +3,7 @@ import TimerListItem from './TimerListItem';
 import { useTimersStore } from '../../store/timers/timersStore';
 
 const TimerList = () => {
-  const { timers, addTimer, updateTimer, currentTimerId, setCurrentTimer, resetAllTimersOvertime } = useTimersStore();
+  const { timers, addTimer, updateTimer, currentTimerId, setCurrentTimer, resetAllTimersOvertime, deleteTimer } = useTimersStore();
 
   const handleRunTimers = () => {
     if (timers.length > 0) {
@@ -14,6 +14,13 @@ const TimerList = () => {
 
   const handleStopTimers = () => {
     setCurrentTimer(null);
+  };
+
+  const handleDeleteTimer = (id: number) => {
+    if (currentTimerId === id) {
+      setCurrentTimer(null);
+    }
+    deleteTimer(id);
   };
 
   return (
@@ -41,6 +48,13 @@ const TimerList = () => {
               isDisabled={timer.id === currentTimerId}
               overtime={timer.overtime}
             />
+            <button 
+              onClick={() => handleDeleteTimer(timer.id)}
+              className="delete-timer-button"
+              disabled={timer.id === currentTimerId}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>

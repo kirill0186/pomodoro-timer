@@ -16,6 +16,7 @@ interface TimersStore {
     getTimer: (id: number | null) => TimerItem | null;
     isTimerLast: (id: number | null) => boolean;
     setTimerOvertime: (id: number, overtime: number) => void;
+    deleteTimer: (id: number) => void;
     resetAllTimersOvertime: () => void;
 }
 
@@ -43,6 +44,10 @@ export const useTimersStore = create<TimersStore>((set, get) => ({
         timers: state.timers.map((timer) =>
             timer.id === id ? { ...timer, overtime } : timer
         ),
+    })),
+    deleteTimer: (id: number) => set((state) => ({
+        timers: state.timers.filter(timer => timer.id !== id),
+        currentTimerId: state.currentTimerId === id ? null : state.currentTimerId
     })),
     resetAllTimersOvertime: () => set((state) => ({
         timers: state.timers.map(timer => ({ ...timer, overtime: 0 }))
