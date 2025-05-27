@@ -44,11 +44,12 @@ const TimerList = () => {
         {timers.map(timer => (
           <div key={timer.id} className={`timer-item ${timer.id === currentTimerId ? 'active' : ''}`}>
             <TimerListItem
-              upadteTimer={(seconds: number) => updateTimer(timer.id, seconds)}
+              upadteTimer={(time: string) => updateTimer(timer.id, time)}
               isDisabled={timer.id === currentTimerId}
               overtime={timer.overtime}
+              time={timer.time}
             />
-            <button 
+            <button
               onClick={() => handleDeleteTimer(timer.id)}
               className="delete-timer-button"
               disabled={timer.id === currentTimerId}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './MainTimer.css';
 import MainTimerInput from './MainTimerInput';
 import { useTimersStore } from '../../store/timers/timersStore';
+import { inputTimeToSeconds } from '../../utils/timeFormat';
 
 const MainTimer = () => {
   const [time, setTime] = useState<number>(0);
@@ -12,7 +13,7 @@ const MainTimer = () => {
     const currentTimer = getTimer(currentTimerId);
 
     if (currentTimer) {
-      setTime(currentTimer.seconds);
+      setTime(inputTimeToSeconds(currentTimer.time));
       setIsRunning(true);
     } else {
       setTime(0);

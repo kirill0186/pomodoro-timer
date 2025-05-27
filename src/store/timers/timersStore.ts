@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 
 interface TimerItem {
     id: number;
-    seconds: number;
+    time: string;
     overtime: number;
 }
 
@@ -12,7 +12,7 @@ interface TimersStore {
     nextId: number;
     currentTimerId: number | null;
     addTimer: () => void;
-    updateTimer: (id: number, seconds: number) => void;
+    updateTimer: (id: number, time: string) => void;
     setCurrentTimer: (id: number | null) => void;
     getTimer: (id: number | null) => TimerItem | null;
     isTimerLast: (id: number | null) => boolean;
@@ -28,12 +28,12 @@ export const useTimersStore = create<TimersStore>()(
             nextId: 1,
             currentTimerId: null,
             addTimer: () => set((state) => ({
-                timers: [...state.timers, { id: state.nextId, seconds: 0, overtime: 0 }],
+                timers: [...state.timers, { id: state.nextId, time: "", overtime: 0 }],
                 nextId: state.nextId + 1,
             })),
-            updateTimer: (id: number, seconds: number) => set((state) => ({
+            updateTimer: (id: number, time: string) => set((state) => ({
                 timers: state.timers.map((timer) =>
-                    timer.id === id ? { ...timer, seconds } : timer
+                    timer.id === id ? { ...timer, time } : timer
                 ),
             })),
             setCurrentTimer: (id: number | null) => set({ currentTimerId: id }),
