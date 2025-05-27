@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { formatInputToTime, sanitizeTimerValue, formatOvertime } from '../../utils/timeFormat';
+import { formatInputToTime, sanitizeTimerValue, formatTime, inputTimeToSeconds } from '../../utils/timeFormat';
 
 interface TimerListItemProps {
   upadteTimer: (time: string) => void;
@@ -34,6 +34,7 @@ const TimerListItem = ({ upadteTimer, isDisabled = false, overtime, time }: Time
   };
 
   const displayTime = formatInputToTime(time);
+  const totalElapsedTime = overtime + inputTimeToSeconds(time);
 
   return (
     <div>
@@ -53,7 +54,7 @@ const TimerListItem = ({ upadteTimer, isDisabled = false, overtime, time }: Time
         onClick={handleDisplayClick}
       >
         <span>{displayTime}</span>
-        {overtime > 0 && <span className="overtime">{formatOvertime(overtime)}</span>}
+        {overtime > 0 && <span className="overtime">{formatTime(totalElapsedTime)}</span>}
       </div>
     </div>
   );
